@@ -1,12 +1,13 @@
-from email import message
+from itertools import product
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import redirect, render
-from apps.models import Category, Contact, Product, UserForm, Contact
+from apps.models import Category, Contact, Order, Product, UserForm, Contact
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from cart.cart import Cart
+from django.contrib.auth.models import User
 
 
 def index(request):
@@ -53,7 +54,30 @@ def contact_page(request):
     return render(request, "contact.html")
 
 
+def checkout(request):
+    if request.method == "POST":
+        phone = request.POST.get("phone")
+        address = request.POST.get("address")
+        pincode = request.POST.get("address")
+        cart = request.session.get("cart")
+        uid = request.session.get('_auth_user_id')
+        user = User.objects.get(pk=uid)
 
+        for i in cart:
+            order = Order(
+                user = user,
+                product = cart[i]["name"],
+                price = cart[i]["price"],
+                quantity = cart[i]["quantity"],
+                phone = phone,
+                address = address,
+                pincode = pincode,
+                total = (int(cart[i]["price"]))*(cart[i]["quantity"])
+            )
+            order.save()
+        request.session['cart'] = {}
+        return redirect("index")
+    return HttpResponse("This is Checkout Page")
 
 
 @login_required(login_url="/accounts/login")
