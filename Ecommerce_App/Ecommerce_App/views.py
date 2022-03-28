@@ -1,8 +1,9 @@
+from email import message
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import redirect, render
-from apps.models import Category, Product, UserForm
+from apps.models import Category, Contact, Product, UserForm, Contact
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from cart.cart import Cart
@@ -40,8 +41,22 @@ def register(request):
     dictn = {'form': form }
     return render(request, 'registration/register.html', context=dictn)
 
+def contact_page(request):
+    if request.method == "POST":
+        contact = Contact(
+            name = request.POST.get('name'),
+            email = request.POST.get('email'),
+            subject = request.POST.get('subject'),
+            message = request.POST.get('message'),
+        )
+        contact.save()
+    return render(request, "contact.html")
 
-@login_required(login_url="/users/login")
+
+
+
+
+@login_required(login_url="/accounts/login")
 def cart_add(request, id):
     cart = Cart(request)
     product = Product.objects.get(id=id)
@@ -49,7 +64,7 @@ def cart_add(request, id):
     return redirect("index")
 
 
-@login_required(login_url="/users/login")
+@login_required(login_url="/accounts/login")
 def item_clear(request, id):
     cart = Cart(request)
     product = Product.objects.get(id=id)
@@ -57,7 +72,7 @@ def item_clear(request, id):
     return redirect("cart_detail")
 
 
-@login_required(login_url="/users/login")
+@login_required(login_url="/accounts/login")
 def item_increment(request, id):
     cart = Cart(request)
     product = Product.objects.get(id=id)
@@ -65,7 +80,7 @@ def item_increment(request, id):
     return redirect("cart_detail")
 
 
-@login_required(login_url="/users/login")
+@login_required(login_url="/accounts/login")
 def item_decrement(request, id):
     cart = Cart(request)
     product = Product.objects.get(id=id)
@@ -73,13 +88,13 @@ def item_decrement(request, id):
     return redirect("cart_detail")
 
 
-@login_required(login_url="/users/login")
+@login_required(login_url="/accounts/login")
 def cart_clear(request):
     cart = Cart(request)
     cart.clear()
     return redirect("cart_detail")
 
 
-@login_required(login_url="/users/login")
+@login_required(login_url="/accounts/login")
 def cart_detail(request):
     return render(request, 'cart/cart_detail.html')

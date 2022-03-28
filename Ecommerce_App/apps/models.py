@@ -1,3 +1,4 @@
+
 from django.db import models
 from django import forms
 from django.contrib.auth.models import User
@@ -54,4 +55,27 @@ class UserForm(UserCreationForm):
             user.save()
         else:
             return user
+    
+class Contact(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
+    subject = models.CharField(max_length=100)
+    message = models.TextField()
+
+    def __str__(self):
+        return self.email
+
+class Order(models.Model):
+    image = models.ImageField(upload_to="Ecommerce_App/order/image")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quantity = models.CharField(max_length=50)
+    price = models.IntegerField()
+    address = models.TextField()
+    phone = models.CharField(max_length=11)
+    pincode = models.CharField(max_length=12)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.product.name
     

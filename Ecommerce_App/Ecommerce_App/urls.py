@@ -13,6 +13,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('register/', views.register, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('contact_us', views.contact_page, name="contact_page"),
 
     #AddtoCart
     path('cart/add/<int:id>/', views.cart_add, name='cart_add'),
