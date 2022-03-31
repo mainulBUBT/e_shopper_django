@@ -1,5 +1,53 @@
 {%  extends "base.html" %}
 
 {% block body %}
+<section id="cart_items">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">Your Orders</li>
+            </ol>
+        </div>
+        <div class="table-responsive cart_info">
+            <table class="table table-condensed">
+                <thead>
+                    <tr class="cart_menu">
+                        <td class="image">Item</td>
+                        <td class="description"></td>
+                        <td class="price">Price</td>
+                        <td class="quantity">Quantity</td>
+                        <td class="total">Total</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for value in order %}
+                    <tr>
+                        <td class="cart_product">
+                            <a href=""><img src="{{value.image}}" alt="" width="50"></a>
+                        </td>
+                        <td class="cart_description">
+                            <h4><a href="">{{value.name}}</a></h4>
+                            <p>Web ID: 1089772</p>
+                        </td>
+                        <td class="cart_price">
+                            <p>${{value.price}} </p>
+                        </td>
+                        <td class="cart_quantity">
+                            {{value.quantity}}
+                        </td>
+                        <td class="cart_total">
+                            <p class="cart_total_price">${{ value.total }}</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<br>
+<!--/#cart_items-->
 
 {% endblock %}

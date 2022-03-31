@@ -15,6 +15,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('contact_us/', views.contact_page, name="contact_page"),
     path("checkout/", views.checkout, name="checkout"),
+    path("order/", views.your_order, name="order"),
 
     #AddtoCart
     path('cart/add/<int:id>/', views.cart_add, name='cart_add'),

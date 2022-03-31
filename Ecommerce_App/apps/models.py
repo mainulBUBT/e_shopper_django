@@ -66,7 +66,7 @@ class Contact(models.Model):
         return self.email
 
 class Order(models.Model):
-    image = models.ImageField(upload_to="Ecommerce_App/order/image")
+    image = models.ImageField(upload_to="product_images")
     product = models.CharField(max_length=500, default="")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     price = models.IntegerField()

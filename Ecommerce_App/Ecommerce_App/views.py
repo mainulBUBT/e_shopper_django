@@ -1,3 +1,4 @@
+from email.mime import image
 from itertools import product
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
@@ -66,6 +67,7 @@ def checkout(request):
         for i in cart:
             order = Order(
                 user = user,
+                image=cart[i]["image"],
                 product = cart[i]["name"],
                 price = cart[i]["price"],
                 quantity = cart[i]["quantity"],
@@ -79,7 +81,16 @@ def checkout(request):
         return redirect("index")
     return HttpResponse("This is Checkout Page")
 
+def your_order(request):
+    uid = request.session.get("_auth_user_id")
+    user = User.objects.get(pk=uid)
+    
+    order = Order.objects.filter(user=user)
 
+    return render(request, 'order.html', context={'order':order})
+
+
+#CART FUNCTIONALITIES BELOW
 @login_required(login_url="/accounts/login")
 def cart_add(request, id):
     cart = Cart(request)
