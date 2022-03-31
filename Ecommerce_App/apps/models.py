@@ -19,11 +19,18 @@ class Sub_Category(models.Model):
 
     def __str__(self):
         return f'Sub category is: {self.name}'
-    
+
+class Brand(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
     
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=False, default='')
     sub_category = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, null=False, default='')
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='product_images')
     price = models.IntegerField()

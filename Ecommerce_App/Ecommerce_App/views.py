@@ -1,10 +1,8 @@
-from email.mime import image
-from itertools import product
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import redirect, render
-from apps.models import Category, Contact, Order, Product, UserForm, Contact
+from apps.models import Brand, Category, Contact, Order, Product, UserForm, Contact
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from cart.cart import Cart
@@ -13,14 +11,18 @@ from django.contrib.auth.models import User
 
 def index(request):
     category = Category.objects.all()
-    
+    brand = Brand.objects.all()
+
+    brandID = request.GET.get('brand')
     categoryID = request.GET.get('category')
     if categoryID:
         product = Product.objects.filter(sub_category=categoryID).order_by('-id')
+    elif brandID:
+        product = Product.objects.filter(brand=brandID).order_by('-id')
     else:
         product = Product.objects.all()
 
-    dictn = {'category': category, 'product':product}
+    dictn = {'category': category, 'product':product, 'brand':brand}
     return render(request, 'index.html', context=dictn) 
 
 def register(request):
